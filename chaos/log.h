@@ -15,14 +15,15 @@ namespace chaos
     {
     public:
         typedef std::shared_ptr<LogEvent> ptr;
-        LogEvent();
+        LogEvent(const char* file, int32_t line, uint32_t elapse, uint32_t thread_id, uint32_t fiber_id, uint64_t time);
         const char *getFile() const { return m_file; }
         int32_t getLine() const { return m_line; }
         uint32_t getElapse() const { return m_elapse; }
         uint32_t getThreadId() const { return m_threadId; }
         uint32_t getFiberId() const { return m_fiberId; }
         uint64_t getTime() const { return m_time; }
-        const std::string &getContent() const { return m_content; }
+        std::string getContent() const { return m_ss.str(); }
+        std::stringstream& getSS() { return m_ss; }
 
     private:
         const char *m_file = nullptr; //文件路径
@@ -31,7 +32,7 @@ namespace chaos
         uint32_t m_threadId = 0;      //线程号
         uint32_t m_fiberId = 0;       //协程号
         uint64_t m_time;              //时间戳
-        std::string m_content;        //内容
+        std::stringstream m_ss;        //内容
     };
 
     //日志级别
@@ -88,7 +89,7 @@ namespace chaos
         LogFormatter::ptr getFormatter() const { return m_formatter; }
 
     protected:
-        LogLevel::Level m_level; //指Appender是针对哪个日志级别
+        LogLevel::Level m_level = LogLevel::DEBUG; //指Appender是针对哪个日志级别
         LogFormatter::ptr m_formatter;
     };
 
@@ -96,7 +97,7 @@ namespace chaos
     class Logger : public std::enable_shared_from_this<Logger>
     {
     public:
-        typedef std::shared_ptr<LogEvent> ptr;
+        typedef std::shared_ptr<Logger> ptr;
 
         Logger(const std::string &name = "root");
         void log(LogLevel::Level level, LogEvent::ptr event);

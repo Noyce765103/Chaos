@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <functional>
+#include <time.h>
 namespace chaos
 {
 
@@ -24,15 +25,28 @@ namespace chaos
         }
         return "UNKNOW";
     }
+    LogEvent::LogEvent(const char *file, int32_t line, uint32_t elapse, uint32_t thread_id, uint32_t fiber_id, uint64_t time) : m_file(file), m_line(line), m_elapse(elapse), m_threadId(thread_id), m_fiberId(fiber_id), m_time(time) {}
 
-    Logger::Logger(const std::string &name) : m_name(name)
+    /*
+    *%m -- 消息体
+    *%p -- level
+    *%r -- 启动后的时间
+    *%c -- 日志名称
+    *%t -- 线程id
+    *%n -- 回车换行
+    *%d -- 时间
+    *%f -- 文件名
+    *%l -- 行号
+    */
+    Logger::Logger(const std::string &name) : m_name(name), m_level(LogLevel::DEBUG)
     {
-        m_formatter.reset(new LogFormatter("%d  [%p] %f %l %m %n"));
+        m_formatter.reset(new LogFormatter("%d  [%p] <%f:%l> %m %n"));
     }
 
     void Logger::addAppender(LogAppender::ptr appender)
     {
-        if(!appender->getFormatter()){
+        if (!appender->getFormatter())
+        {
             appender->setFormatter(m_formatter);
         }
         m_appenders.push_back(appender);
@@ -112,6 +126,7 @@ namespace chaos
 
     LogFormatter::LogFormatter(const std::string &pattern) : m_pattern(pattern)
     {
+        init();
     }
 
     class MessageFormatItem : public LogFormatter::FormatItem
@@ -177,11 +192,20 @@ namespace chaos
     class DateTimeFormatItem : public LogFormatter::FormatItem
     {
     public:
-        DateTimeFormatItem(const std::string &format = "%Y:%m:%d %H:%M:%S")
-            : m_format(format){}
+        DateTimeFormatItem(const std::string &format = "%Y-%m-%d %H:%M:%S")
+            : m_format(format) {
+                if(m_format.empty()){
+                    m_format = "%Y-%m-%d %H:%M:%S";
+                }
+            }
         void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override
         {
-            os << event->getTime();
+            struct tm tm;
+            time_t time = event->getTime();
+            localtime_r(&time, &tm);
+            char buf[64];
+            strftime(buf, sizeof(buf), m_format.c_str(), &tm);
+            os << buf;
         }
 
     private:
@@ -243,6 +267,17 @@ namespace chaos
         return ss.str();
     }
     //%xxx %xxx{xxx} %%
+    /*
+    *%m -- 消息体
+    *%p -- level
+    *%r -- 启动后的时间
+    *%c -- 日志名称
+    *%t -- 线程id
+    *%n -- 回车换行
+    *%d -- 时间
+    *%f -- 文件名
+    *%l -- 行号
+    */
     void LogFormatter::init()
     {
         //str, format, type
@@ -275,7 +310,7 @@ namespace chaos
             //解析%xx{xx}
             while (n < m_pattern.size())
             {
-                if (isspace(m_pattern[n]))
+                if (!isalpha(m_pattern[n]) && m_pattern[i] != '{' && m_pattern[n] != '}')
                     break;
                 if (fmt_status == 0)
                 {
@@ -297,16 +332,18 @@ namespace chaos
                         break;
                     }
                 }
+                ++n;
             }
             if (fmt_status == 0)
             {
                 if (!nstr.empty())
                 {
                     vec.push_back(std::make_tuple(nstr, "", 0));
+                    nstr.clear();
                 }
                 str = m_pattern.substr(i + 1, n - i - 1);
                 vec.push_back(std::make_tuple(str, fmt, 1));
-                i = n;
+                i = n - 1;
             }
             else if (fmt_status == 1)
             {
@@ -318,9 +355,10 @@ namespace chaos
                 if (!nstr.empty())
                 {
                     vec.push_back(std::make_tuple(nstr, "", 0));
+                    nstr.clear();
                 }
                 vec.push_back(std::make_tuple(str, fmt, 1));
-                i = n;
+                i = n - 1;
             }
         }
         if (!nstr.empty())
@@ -344,17 +382,7 @@ namespace chaos
             XX(l, LineFormatItem),
 #undef XX
         };
-        /*
-    *%m -- 消息体
-    *%p -- level
-    *%r -- 启动后的时间
-    *%c -- 日志名称
-    *%t -- 线程id
-    *%n -- 回车换行
-    *%d -- 时间
-    *%f -- 文件名
-    *%l -- 行号
-    */
+
         for (auto &i : vec)
         {
             //string类型
@@ -375,7 +403,7 @@ namespace chaos
                     m_items.push_back(it->second(std::get<1>(i)));
                 }
             }
-            std::cout << std::get<0>(i) << " - " << std::get<1>(i) << " - " << std::get<2>(i) << std::endl;
+            std::cout << "(" << std::get<0>(i) << ") - (" << std::get<1>(i) << ") - (" << std::get<2>(i) << ")" << std::endl;
         }
     }
 

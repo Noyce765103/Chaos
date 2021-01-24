@@ -6,7 +6,23 @@
 
 #IncludeRegexTransform: 
 
+/home/ubuntu/chaos/chaos/log.h
+string
+-
+memory
+-
+list
+-
+sstream
+-
+fstream
+-
+vector
+-
+
 /home/ubuntu/chaos/tests/test.cc
 iostream
 -
+../chaos/log.h
+/home/ubuntu/chaos/chaos/log.h
 
