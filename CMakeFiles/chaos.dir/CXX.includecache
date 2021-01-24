@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ubuntu/chaos/chaos/log.cc
+log.h
+/home/ubuntu/chaos/chaos/log.h
+iostream
+-
+map
+-
+functional
+-
+
+/home/ubuntu/chaos/chaos/log.h
+string
+-
+memory
+-
+list
+-
+sstream
+-
+fstream
+-
+vector
+-
+
