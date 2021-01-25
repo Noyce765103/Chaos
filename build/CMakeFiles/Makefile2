@@ -60,7 +60,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/ubuntu/chaos
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ubuntu/chaos
+CMAKE_BINARY_DIR = /home/ubuntu/chaos/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/chaos.dir
@@ -69,7 +69,7 @@ CMAKE_BINARY_DIR = /home/ubuntu/chaos
 CMakeFiles/chaos.dir/all:
 	$(MAKE) -f CMakeFiles/chaos.dir/build.make CMakeFiles/chaos.dir/depend
 	$(MAKE) -f CMakeFiles/chaos.dir/build.make CMakeFiles/chaos.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/chaos/CMakeFiles --progress-num=1,2,3 "Built target chaos"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/chaos/build/CMakeFiles --progress-num=1,2,3 "Built target chaos"
 .PHONY : CMakeFiles/chaos.dir/all
 
 # Include target in all.
@@ -79,9 +79,9 @@ all: CMakeFiles/chaos.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/chaos.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/chaos/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/chaos/build/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/chaos.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/chaos/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/chaos/build/CMakeFiles 0
 .PHONY : CMakeFiles/chaos.dir/rule
 
 # Convenience name for target.
@@ -106,7 +106,7 @@ clean: CMakeFiles/chaos.dir/clean
 CMakeFiles/test.dir/all: CMakeFiles/chaos.dir/all
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/depend
 	$(MAKE) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/chaos/CMakeFiles --progress-num=4,5 "Built target test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ubuntu/chaos/build/CMakeFiles --progress-num=4,5 "Built target test"
 .PHONY : CMakeFiles/test.dir/all
 
 # Include target in all.
@@ -116,9 +116,9 @@ all: CMakeFiles/test.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/chaos/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/chaos/build/CMakeFiles 5
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/chaos/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/chaos/build/CMakeFiles 0
 .PHONY : CMakeFiles/test.dir/rule
 
 # Convenience name for target.

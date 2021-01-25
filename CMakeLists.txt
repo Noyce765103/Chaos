@@ -6,6 +6,7 @@ set(CNAJE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -03 -g -std=c++11 -Wall -Wno=depre
 
 set(LIB_SRC
     chaos/log.cc
+    chaos/util.cc
     )
 
 add_library(chaos SHARED ${LIB_SRC})

@@ -4,3 +4,6 @@
 CMakeFiles/chaos.dir/chaos/log.cc.o
  /home/ubuntu/chaos/chaos/log.cc
  /home/ubuntu/chaos/chaos/log.h
+CMakeFiles/chaos.dir/chaos/util.cc.o
+ /home/ubuntu/chaos/chaos/util.cc
+ /home/ubuntu/chaos/chaos/util.h

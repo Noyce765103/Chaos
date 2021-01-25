@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/chaos.dir/chaos/log.cc.o"
   "CMakeFiles/chaos.dir/chaos/util.cc.o"
-  "lib/libchaos.pdb"
-  "lib/libchaos.so"
+  "../lib/libchaos.pdb"
+  "../lib/libchaos.so"
 )
 
 # Per-language clean rules from dependency scanning.

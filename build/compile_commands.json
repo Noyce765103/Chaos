@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/ubuntu/chaos/build",
+  "command": "/usr/bin/c++  -Dchaos_EXPORTS  -g -fPIC   -o CMakeFiles/chaos.dir/chaos/log.cc.o -c /home/ubuntu/chaos/chaos/log.cc",
+  "file": "/home/ubuntu/chaos/chaos/log.cc"
+},
+{
+  "directory": "/home/ubuntu/chaos/build",
+  "command": "/usr/bin/c++  -Dchaos_EXPORTS  -g -fPIC   -o CMakeFiles/chaos.dir/chaos/util.cc.o -c /home/ubuntu/chaos/chaos/util.cc",
+  "file": "/home/ubuntu/chaos/chaos/util.cc"
+},
+{
+  "directory": "/home/ubuntu/chaos/build",
+  "command": "/usr/bin/c++    -g   -o CMakeFiles/test.dir/tests/test.cc.o -c /home/ubuntu/chaos/tests/test.cc",
+  "file": "/home/ubuntu/chaos/tests/test.cc"
+}
+]

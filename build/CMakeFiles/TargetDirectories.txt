@@ -1,0 +1,4 @@
+/home/ubuntu/chaos/build/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/chaos/build/CMakeFiles/edit_cache.dir
+/home/ubuntu/chaos/build/CMakeFiles/chaos.dir
+/home/ubuntu/chaos/build/CMakeFiles/test.dir

@@ -6,35 +6,21 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+
+#define CHAOS_LOG_LEVEL(logger, level) \
+    if(logger->getLevel() <= level) \
+        chaos::LogEventWrap(chaos::LogEvent::ptr(new chaos::LogEvent(logger, level, __FILE__, __LINE__, 0, chaos::GetThreadId(),\
+        chaos::GetFiberId(),time(0)))).getSS()
+
+#define CHAOS_LOG_DEBUG(logger) CHAOS_LOG_LEVEL(logger, chaos::LogLevel::DEBUG)
+#define CHAOS_LOG_INFO(logger) CHAOS_LOG_LEVEL(logger, chaos::LogLevel::INFO)
+#define CHAOS_LOG_WARN(logger) CHAOS_LOG_LEVEL(logger, chaos::LogLevel::WARN)
+#define CHAOS_LOG_ERROR(logger) CHAOS_LOG_LEVEL(logger, chaos::LogLevel::ERROR)
+#define CHAOS_LOG_FATAL(logger) CHAOS_LOG_LEVEL(logger, chaos::LogLevel::FATAL)
 namespace chaos
 {
 
     class Logger;
-    //日志时间
-    class LogEvent
-    {
-    public:
-        typedef std::shared_ptr<LogEvent> ptr;
-        LogEvent(const char* file, int32_t line, uint32_t elapse, uint32_t thread_id, uint32_t fiber_id, uint64_t time);
-        const char *getFile() const { return m_file; }
-        int32_t getLine() const { return m_line; }
-        uint32_t getElapse() const { return m_elapse; }
-        uint32_t getThreadId() const { return m_threadId; }
-        uint32_t getFiberId() const { return m_fiberId; }
-        uint64_t getTime() const { return m_time; }
-        std::string getContent() const { return m_ss.str(); }
-        std::stringstream& getSS() { return m_ss; }
-
-    private:
-        const char *m_file = nullptr; //文件路径
-        int32_t m_line = 0;           //行号
-        uint32_t m_elapse = 0;        //程序启动开始到现在的毫秒数
-        uint32_t m_threadId = 0;      //线程号
-        uint32_t m_fiberId = 0;       //协程号
-        uint64_t m_time;              //时间戳
-        std::stringstream m_ss;        //内容
-    };
-
     //日志级别
     class LogLevel
     {
@@ -51,6 +37,47 @@ namespace chaos
         static const char *ToString(LogLevel::Level level);
     };
 
+
+    //日志时间
+    class LogEvent
+    {
+    public:
+        typedef std::shared_ptr<LogEvent> ptr;
+        LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level, const char* file, int32_t line, uint32_t elapse, uint32_t thread_id, uint32_t fiber_id, uint64_t time);
+        const char *getFile() const { return m_file; }
+        int32_t getLine() const { return m_line; }
+        uint32_t getElapse() const { return m_elapse; }
+        uint32_t getThreadId() const { return m_threadId; }
+        uint32_t getFiberId() const { return m_fiberId; }
+        uint64_t getTime() const { return m_time; }
+        std::string getContent() const { return m_ss.str(); }
+        std::stringstream& getSS() { return m_ss; }
+        std::shared_ptr<Logger> getLogger() const {return m_logger; }
+        LogLevel::Level getLevel() const {return m_level; }
+
+    private:
+        const char *m_file = nullptr;     //文件路径
+        int32_t m_line = 0;               //行号
+        uint32_t m_elapse = 0;            //程序启动开始到现在的毫秒数
+        uint32_t m_threadId = 0;          //线程号
+        uint32_t m_fiberId = 0;           //协程号
+        uint64_t m_time;                  //时间戳
+        std::stringstream m_ss;           //内容
+        std::shared_ptr<Logger> m_logger; //logger
+        LogLevel::Level m_level;          //日志级别
+    };
+
+    //LogEvent封装类，作用是当析构时自动将event写入logger
+    class LogEventWrap{
+    public:
+        LogEventWrap(LogEvent::ptr e);
+        ~LogEventWrap();
+        std::stringstream& getSS();
+    private:
+        LogEvent::ptr m_event;
+    };
+
+    
     //日志格式器
     class LogFormatter
     {
@@ -68,12 +95,13 @@ namespace chaos
             virtual ~FormatItem() {}
             virtual void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
         };
-
+        bool isError() const {return m_error; }
         void init();
 
     private:
         std::string m_pattern;
         std::vector<FormatItem::ptr> m_items;
+        bool m_error = false;
     };
 
     //日志输出地

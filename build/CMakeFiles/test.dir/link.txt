@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/test.dir/tests/test.cc.o  -o ../bin/test -Wl,-rpath,/home/ubuntu/chaos/lib ../lib/libchaos.so 
